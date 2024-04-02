@@ -1,0 +1,117 @@
+library mlg_command;
+
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:analyzer/dart/analysis/features.dart';
+import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/visitor.dart';
+import 'package:analyzer/source/line_info.dart';
+import 'package:arch_buddy/commands/command.dart';
+import 'package:arch_buddy/communication/network_communication.dart';
+import 'package:arch_buddy/config/compiletime_configs.dart';
+import 'package:arch_buddy/config/runtime_configs.dart';
+import 'package:arch_buddy/services/excel_service.dart';
+import 'package:arch_buddy/services/file_service.dart';
+import 'package:arch_buddy/utils/logger.dart';
+import 'package:arch_buddy/utils/menu_selection/menu.dart';
+import 'package:excel/excel.dart';
+
+part 'generate_translation_xlsx.dart';
+part 'analyze_translation_xlsx.dart';
+part 'app_string_analyzer.dart';
+part 'generate_app_localization_dart_files.dart';
+part 'app_translations_analyzer.dart';
+
+class ArchBuddyMLG extends Command {
+  ArchBuddyMLG(super.args);
+
+  String varHeaderName = 'Varibale/Method Name';
+  String paramHeaderName = 'Parameters';
+
+  @override
+  Future<void> run() async {
+    CWLogger.namedLog('Codewave Multilingual tool : ');
+    Menu<String> menu1 = Menu([
+      'Generate Excel file',
+      'Analyze Excel file and enable localization in the project'
+    ]);
+
+    int idx1;
+    switch (CompiletimeConfig.currentCLIEnvironment) {
+      case CLIEnvironment.dev:
+        idx1 = 1;
+      case CLIEnvironment.prod:
+        idx1 = menu1.choose().index;
+    }
+
+    if (idx1 == 0) {
+      AppStringContext appStringContext = await analyzeAppStringFile(
+        '${RuntimeConfig.commandExecutionPath}/${RuntimeConfig.l10nAppStringPath}',
+      );
+
+      List<AppStringContext>? languagesContext =
+          await analyzeAppTranlationFiles(
+        '${RuntimeConfig.commandExecutionPath}/${RuntimeConfig.l10ngeneratedPath}',
+      );
+
+      await generateExcel(appStringContext, languagesContext);
+
+      exit(0);
+    }
+
+    Menu<String> menu2 = Menu([
+      'Use Google sheet URL',
+      'Access the local excel file (codewave_translation_${RuntimeConfig.pubspec.name}.xlsx)'
+    ]);
+
+    int idx2;
+
+    switch (CompiletimeConfig.currentCLIEnvironment) {
+      case CLIEnvironment.dev:
+        idx2 = 2;
+      case CLIEnvironment.prod:
+        idx2 = menu2.choose().index;
+    }
+
+    if (idx2 == 0) {
+      CWLogger.i.stdout('Please enter the Google sheet URL :');
+      String? response = stdin.readLineSync();
+      if (response == null) exit(2);
+      String fileId = extractFileId(response);
+      CWLogger.i.progress('Downloading Google sheet');
+      await NetworkCommunication.downloadSheetAsExcel(
+        fileId,
+        '${RuntimeConfig.commandExecutionPath}/codewave_translation_${RuntimeConfig.pubspec.name}.xlsx',
+      );
+    }
+
+    Map<String, AnalyzedLangugaeData> langData = analyzeExcelFile(
+      '${RuntimeConfig.commandExecutionPath}/codewave_translation_${RuntimeConfig.pubspec.name}.xlsx',
+    );
+
+    AppStringContext appStringContext = await analyzeAppStringFile(
+        '${RuntimeConfig.commandExecutionPath}/${RuntimeConfig.l10nAppStringPath}');
+
+    await generateAppLocalizationFile(
+      langData: langData,
+      appStringContext: appStringContext,
+      generationFolder:
+          '${RuntimeConfig.commandExecutionPath}/${RuntimeConfig.l10ngeneratedPath}',
+    );
+
+    exit(0);
+  }
+
+  static String extractFileId(String url) {
+    var regExp = RegExp(r"/spreadsheets/d/([a-zA-Z0-9-_]+)");
+    var match = regExp.firstMatch(url);
+    String? fileId = match?.group(1);
+    if (fileId == null) {
+      CWLogger.i.stderr('Seems like the URL is wrong!, please try again.');
+      exit(2);
+    }
+    return fileId;
+  }
+}
