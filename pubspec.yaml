@@ -12,6 +12,12 @@ dependencies:
   cli_util: ^0.4.1
   cwa_plugin_core:
     path: /Users/codewave/Desktop/projects/cli/cwa_plugin_core
+  cw_core:
+    path: /Users/codewave/Desktop/projects/cli/cw_core
+  pubspec: ^2.3.0
+  pub_semver: ^2.1.4
+  analyzer: ^6.4.1
+
   # path: ^1.8.0
 
 dev_dependencies:

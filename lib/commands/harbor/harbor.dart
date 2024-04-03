@@ -5,14 +5,17 @@ import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
-import 'package:arch_buddy/commands/mlg/mlg.dart';
-import 'package:arch_buddy/config/runtime_configs.dart';
-import 'package:arch_buddy/models/specification_model.dart';
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
+import 'package:flutter_cwa_plugin/commands/mlg/mlg.dart';
+import 'package:flutter_cwa_plugin/config/runtime_config.dart';
+import 'package:flutter_cwa_plugin/model/specification.dart';
 import 'package:pubspec/pubspec.dart';
 
 class ArchBuddyHarbor extends Command {
   ArchBuddyHarbor(super.args);
+
+  @override
+  String get description => "Prepare features or libraries for release.";
 
   @override
   Future<void> run() async {
@@ -85,16 +88,21 @@ class ArchBuddyHarbor extends Command {
     List<AppStringContext>? appTranslationContexts =
         await archBuddyMLG.analyzeAppTranlationFiles(appTranslationsFilePath);
 
+    SpeficificationDelegate speficificationDelegate =
+        SpecificationYamlImpl.fromFeatureDirectory(featureFolderPath);
+
     FeatureSpecificationYaml featureSpecificationYaml =
-        FeatureSpecificationYaml.fromFeatureDirectory(featureFolderPath);
+        FeatureSpecificationYaml.fromSepcificationDelegate(
+            speficificationDelegate);
 
     Map<String, DependencyReference>? dependencies = {};
 
     if (usedPackages != null && usedPackages.isNotEmpty) {
       for (int idx = 0; idx < usedPackages.length; idx++) {
         String pkg = usedPackages.elementAt(idx);
-        if (RuntimeConfig.pubspec.dependencies.containsKey(pkg)) {
-          dependencies[pkg] = RuntimeConfig.pubspec.dependencies[pkg]!;
+        if (RuntimeConfig().dependencyManager.dependencies.containsKey(pkg)) {
+          dependencies[pkg] =
+              RuntimeConfig().dependencyManager.dependencies[pkg]!;
         }
       }
     }
@@ -106,7 +114,7 @@ class ArchBuddyHarbor extends Command {
       dependencies: dependencies,
     );
 
-    file.save('$featureFolderPath/${FeatureSpecificationYaml.fileName}');
+    file.save('$featureFolderPath/${SpecificationYamlImpl.fileName}');
   }
 
   // Analyze a single Dart file

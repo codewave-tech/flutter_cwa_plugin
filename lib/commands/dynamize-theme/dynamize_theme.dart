@@ -10,6 +10,9 @@ import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 class ArchBuddyDynamizeTheme extends Command {
   ArchBuddyDynamizeTheme(super.args);
 
+  @override
+  String get description => "Create a JSON-convertible model from AppThemes.";
+
   final String appThemeFile = 'lib/core/themes/app_theme.dart';
 
   final String dynamicThemeFile = 'lib/core/themes/dynamic_theme.dart';

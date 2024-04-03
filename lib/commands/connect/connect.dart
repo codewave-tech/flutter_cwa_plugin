@@ -8,6 +8,10 @@ import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 class ArchBuddyConnect extends Command {
   ArchBuddyConnect(super.args);
 
+  @override
+  String get description =>
+      "Link a Flutter App with Wiretap for terminal logging.";
+
   Map<String, bool> connectionInitiators = {};
   Map<String, Socket> socketMap = {};
   Socket? establishedConnection;

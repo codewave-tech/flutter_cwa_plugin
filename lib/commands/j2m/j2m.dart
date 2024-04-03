@@ -8,6 +8,9 @@ import 'j2m_converter.dart';
 class ArchBuddyJ2M extends Command {
   ArchBuddyJ2M(super.args);
 
+  @override
+  String get description => "Generate model for the provided json easily.";
+
   static final String apxJsonPath = 'json-path';
 
   @override

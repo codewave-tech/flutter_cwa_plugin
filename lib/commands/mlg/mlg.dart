@@ -16,6 +16,7 @@ import 'package:arch_buddy/services/excel_service.dart';
 import 'package:arch_buddy/services/file_service.dart';
 import 'package:arch_buddy/utils/logger.dart';
 import 'package:arch_buddy/utils/menu_selection/menu.dart';
+import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 import 'package:excel/excel.dart';
 
 part 'generate_translation_xlsx.dart';
@@ -26,6 +27,9 @@ part 'app_translations_analyzer.dart';
 
 class ArchBuddyMLG extends Command {
   ArchBuddyMLG(super.args);
+
+  @override
+  String get description => "Manage app multilingual settings.";
 
   String varHeaderName = 'Varibale/Method Name';
   String paramHeaderName = 'Parameters';
