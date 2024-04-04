@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
+import 'package:flutter_cwa_plugin/config/plugin_config.dart';
 
 import 'j2m_converter.dart';
 
@@ -36,7 +37,7 @@ class ArchBuddyJ2M extends Command {
       );
       exit(2);
     }
-    if (CompiletimeConfig.currentCLIEnvironment != CLIEnvironment.dev) {
+    if (FlutterPluginConfig.i.pluginEnvironment != PluginEnvironment.dev) {
       CWLogger.inLinePrint("Confirm path : $path? (y/n)");
       if (stdin.readLineSync()?.toLowerCase() != 'y') exit(1);
     }
@@ -60,7 +61,7 @@ class ArchBuddyJ2M extends Command {
     }
 
     String? modelName;
-    if (CompiletimeConfig.currentCLIEnvironment == CLIEnvironment.dev) {
+    if (FlutterPluginConfig.i.pluginEnvironment == PluginEnvironment.dev) {
       modelName = 'DebugModel';
     }
 

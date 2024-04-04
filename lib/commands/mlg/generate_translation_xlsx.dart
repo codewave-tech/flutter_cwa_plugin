@@ -26,7 +26,7 @@ extension GenerateExcel on ArchBuddyMLG {
     );
 
     CWLogger.namedLog(
-      'Excel file has been generated successfully : codewave_translation_${RuntimeConfig.pubspec.name}.xlsx',
+      'Excel file has been generated successfully : codewave_translation_${RuntimeConfig().dependencyManager.name}.xlsx',
       loggerColor: CWLoggerColor.green,
     );
 

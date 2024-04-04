@@ -3,6 +3,7 @@ import 'dart:io' show File;
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 import 'package:flutter_cwa_plugin/commands/mlg/mlg.dart';
 import 'package:flutter_cwa_plugin/config/runtime_config.dart';
+import 'package:flutter_cwa_plugin/utils/framework_utils.dart';
 import 'package:pubspec/pubspec.dart';
 
 class FeatureSpecificationYaml extends SpecificationYamlImpl {
@@ -92,7 +93,7 @@ class FeatureSpecificationYaml extends SpecificationYamlImpl {
         featureSpecificationYaml: featureSpecificationYaml,
       );
 
-      await YamlService.addPubspecDependencies(dependencies: requirements);
+      await FrameworkUtils.addPubspecDependencies(dependencies: requirements);
     }
   }
 

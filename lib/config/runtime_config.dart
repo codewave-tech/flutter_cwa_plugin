@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
+import 'package:flutter_cwa_plugin/config/plugin_config.dart';
 import 'package:pubspec/pubspec.dart';
 
 class RuntimeConfig extends RTC<PubSpec> {
@@ -18,11 +19,11 @@ class RuntimeConfig extends RTC<PubSpec> {
 
   @override
   Future<void> initialize() async {
-    switch (CompiletimeConfig.currentCLIEnvironment) {
-      case CLIEnvironment.dev:
+    switch (FlutterPluginConfig.i.pluginEnvironment) {
+      case PluginEnvironment.dev:
         commandExecutionPath = '/Users/codewave/Desktop/projects/cli/cwa_pilot';
         break;
-      case CLIEnvironment.prod:
+      case PluginEnvironment.prod:
         commandExecutionPath = Directory.current.path;
         break;
     }

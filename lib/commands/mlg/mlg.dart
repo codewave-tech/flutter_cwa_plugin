@@ -10,6 +10,7 @@ import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:analyzer/source/line_info.dart';
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 import 'package:excel/excel.dart';
+import 'package:flutter_cwa_plugin/config/plugin_config.dart';
 import 'package:flutter_cwa_plugin/config/runtime_config.dart';
 
 part 'generate_translation_xlsx.dart';
@@ -36,10 +37,10 @@ class ArchBuddyMLG extends Command {
     ]);
 
     int idx1;
-    switch (CompiletimeConfig.currentCLIEnvironment) {
-      case CLIEnvironment.dev:
+    switch (FlutterPluginConfig.i.pluginEnvironment) {
+      case PluginEnvironment.dev:
         idx1 = 1;
-      case CLIEnvironment.prod:
+      case PluginEnvironment.prod:
         idx1 = menu1.choose().index;
     }
 
@@ -65,10 +66,10 @@ class ArchBuddyMLG extends Command {
 
     int idx2;
 
-    switch (CompiletimeConfig.currentCLIEnvironment) {
-      case CLIEnvironment.dev:
+    switch (FlutterPluginConfig().pluginEnvironment) {
+      case PluginEnvironment.dev:
         idx2 = 2;
-      case CLIEnvironment.prod:
+      case PluginEnvironment.prod:
         idx2 = menu2.choose().index;
     }
 
