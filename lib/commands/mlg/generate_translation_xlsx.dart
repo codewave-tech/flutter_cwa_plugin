@@ -6,7 +6,7 @@ extension GenerateExcel on ArchBuddyMLG {
     ExcelService excelService = ExcelService();
 
     excelService.createExcelFile(
-      'codewave_translation_${RuntimeConfig.pubspec.name}.xlsx',
+      'codewave_translation_${RuntimeConfig().dependencyManager.name}.xlsx',
     );
 
     Sheet sheet = excelService.useSheet('Sheet1');
@@ -38,8 +38,10 @@ extension GenerateExcel on ArchBuddyMLG {
 
     CWLogger.i.progress('Hosting the google sheet');
     await NetworkCommunication.uploadFileToGoogleDrive(
-      fileName: 'codewave_translation_${RuntimeConfig.pubspec.name}.xlsx',
-      filePath: './codewave_translation_${RuntimeConfig.pubspec.name}.xlsx',
+      fileName:
+          'codewave_translation_${RuntimeConfig().dependencyManager.name}.xlsx',
+      filePath:
+          './codewave_translation_${RuntimeConfig().dependencyManager.name}.xlsx',
     );
   }
 
@@ -171,8 +173,8 @@ extension GenerateExcel on ArchBuddyMLG {
         TextCellValue("Codewave Multilingual Content Translation Template");
     title.cellStyle = CellStyle(
       bold: true,
-      backgroundColorHex: 'FF004578',
-      fontColorHex: 'FFFFFFFF',
+      backgroundColorHex: ExcelColor.fromHexString('FF004578'),
+      fontColorHex: ExcelColor.fromHexString('FFFFFFFF'),
       fontSize: 14,
       horizontalAlign: HorizontalAlign.Center,
     );
@@ -192,8 +194,8 @@ extension GenerateExcel on ArchBuddyMLG {
     Data instructions = sheet.cell(CellIndex.indexByString("A2"));
     instructions.value = TextCellValue(instruction);
     instructions.cellStyle = CellStyle(
-      backgroundColorHex: 'FFFFF4CE',
-      fontColorHex: 'FF000000',
+      backgroundColorHex: ExcelColor.fromHexString('FFFFF4CE'),
+      fontColorHex: ExcelColor.fromHexString('FF000000'),
       fontSize: 11,
       horizontalAlign: HorizontalAlign.Center,
       verticalAlign: VerticalAlign.Center,
@@ -216,8 +218,8 @@ extension GenerateExcel on ArchBuddyMLG {
 
     data.cellStyle = CellStyle(
       fontSize: 11,
-      backgroundColorHex: 'FFEDEBE9',
-      fontColorHex: 'FF000000',
+      backgroundColorHex: ExcelColor.fromHexString('FFEDEBE9'),
+      fontColorHex: ExcelColor.fromHexString('FF000000'),
     );
     data.value = TextCellValue(str);
   }

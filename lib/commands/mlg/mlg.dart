@@ -8,16 +8,9 @@ import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:analyzer/source/line_info.dart';
-import 'package:arch_buddy/commands/command.dart';
-import 'package:arch_buddy/communication/network_communication.dart';
-import 'package:arch_buddy/config/compiletime_configs.dart';
-import 'package:arch_buddy/config/runtime_configs.dart';
-import 'package:arch_buddy/services/excel_service.dart';
-import 'package:arch_buddy/services/file_service.dart';
-import 'package:arch_buddy/utils/logger.dart';
-import 'package:arch_buddy/utils/menu_selection/menu.dart';
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 import 'package:excel/excel.dart';
+import 'package:flutter_cwa_plugin/config/runtime_config.dart';
 
 part 'generate_translation_xlsx.dart';
 part 'analyze_translation_xlsx.dart';
@@ -52,12 +45,12 @@ class ArchBuddyMLG extends Command {
 
     if (idx1 == 0) {
       AppStringContext appStringContext = await analyzeAppStringFile(
-        '${RuntimeConfig.commandExecutionPath}/${RuntimeConfig.l10nAppStringPath}',
+        '${RuntimeConfig().commandExecutionPath}/${RuntimeConfig.l10nAppStringPath}',
       );
 
       List<AppStringContext>? languagesContext =
           await analyzeAppTranlationFiles(
-        '${RuntimeConfig.commandExecutionPath}/${RuntimeConfig.l10ngeneratedPath}',
+        '${RuntimeConfig().commandExecutionPath}/${RuntimeConfig.l10ngeneratedPath}',
       );
 
       await generateExcel(appStringContext, languagesContext);
@@ -67,7 +60,7 @@ class ArchBuddyMLG extends Command {
 
     Menu<String> menu2 = Menu([
       'Use Google sheet URL',
-      'Access the local excel file (codewave_translation_${RuntimeConfig.pubspec.name}.xlsx)'
+      'Access the local excel file (codewave_translation_${RuntimeConfig().dependencyManager.name}.xlsx)'
     ]);
 
     int idx2;
@@ -87,22 +80,22 @@ class ArchBuddyMLG extends Command {
       CWLogger.i.progress('Downloading Google sheet');
       await NetworkCommunication.downloadSheetAsExcel(
         fileId,
-        '${RuntimeConfig.commandExecutionPath}/codewave_translation_${RuntimeConfig.pubspec.name}.xlsx',
+        '${RuntimeConfig().commandExecutionPath}/codewave_translation_${RuntimeConfig().dependencyManager.name}.xlsx',
       );
     }
 
     Map<String, AnalyzedLangugaeData> langData = analyzeExcelFile(
-      '${RuntimeConfig.commandExecutionPath}/codewave_translation_${RuntimeConfig.pubspec.name}.xlsx',
+      '${RuntimeConfig().commandExecutionPath}/codewave_translation_${RuntimeConfig().dependencyManager.name}.xlsx',
     );
 
     AppStringContext appStringContext = await analyzeAppStringFile(
-        '${RuntimeConfig.commandExecutionPath}/${RuntimeConfig.l10nAppStringPath}');
+        '${RuntimeConfig().commandExecutionPath}/${RuntimeConfig.l10nAppStringPath}');
 
     await generateAppLocalizationFile(
       langData: langData,
       appStringContext: appStringContext,
       generationFolder:
-          '${RuntimeConfig.commandExecutionPath}/${RuntimeConfig.l10ngeneratedPath}',
+          '${RuntimeConfig().commandExecutionPath}/${RuntimeConfig.l10ngeneratedPath}',
     );
 
     exit(0);
