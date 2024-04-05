@@ -37,7 +37,7 @@ extension GenerateExcel on ArchBuddyMLG {
     if (response == null || response.toLowerCase() != 'y') return;
 
     CWLogger.i.progress('Hosting the google sheet');
-    await NetworkCommunication.uploadFileToGoogleDrive(
+    await GoogleService.uploadFileToGoogleDrive(
       fileName:
           'codewave_translation_${RuntimeConfig().dependencyManager.name}.xlsx',
       filePath:

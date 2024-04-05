@@ -79,7 +79,7 @@ class ArchBuddyMLG extends Command {
       if (response == null) exit(2);
       String fileId = extractFileId(response);
       CWLogger.i.progress('Downloading Google sheet');
-      await NetworkCommunication.downloadSheetAsExcel(
+      await GoogleService.downloadSheetAsExcel(
         fileId,
         '${RuntimeConfig().commandExecutionPath}/codewave_translation_${RuntimeConfig().dependencyManager.name}.xlsx',
       );
