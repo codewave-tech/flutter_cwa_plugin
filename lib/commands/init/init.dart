@@ -125,7 +125,7 @@ class ArchBuddyInit extends Command {
       return;
     }
 
-    String? filePath = argsProcessor?.check(ArchBuddyInit.apxConfigFilePath);
+    String? filePath = argsProcessor.check(ArchBuddyInit.apxConfigFilePath);
 
     if (filePath == null) {
       CWLogger.inLinePrint("Enter the path to config file");
