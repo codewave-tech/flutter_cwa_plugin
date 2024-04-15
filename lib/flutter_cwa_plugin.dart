@@ -38,5 +38,9 @@ class FlutterPlugin extends Plugin {
   @override
   void pluginEntry() {
     super.pluginEntry();
+
+    if (commands.containsKey(args[0])) {
+      commands[args[0]]?.run();
+    }
   }
 }
