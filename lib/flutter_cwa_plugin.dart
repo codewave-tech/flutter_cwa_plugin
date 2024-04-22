@@ -8,6 +8,7 @@ import 'package:flutter_cwa_plugin/commands/harbor/harbor.dart';
 import 'package:flutter_cwa_plugin/commands/init/init.dart';
 import 'package:flutter_cwa_plugin/commands/j2m/j2m.dart';
 import 'package:flutter_cwa_plugin/commands/mlg/mlg.dart';
+import 'package:flutter_cwa_plugin/config/runtime_config.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 class FlutterPlugin extends Plugin {
@@ -38,6 +39,8 @@ class FlutterPlugin extends Plugin {
   @override
   void pluginEntry() {
     super.pluginEntry();
+
+    RuntimeConfig().initialize();
 
     if (commands.containsKey(args[0])) {
       commands[args[0]]?.run();

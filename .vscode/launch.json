@@ -9,7 +9,9 @@
             "request": "launch",
             "type": "dart",
             "args": [
-                "--plugin-install"
+                "init",
+                "standard",
+                "--TOKEN=glpat-dxGAMN6ZaJGtReX5FxYs"
             ]
         }
     ]
