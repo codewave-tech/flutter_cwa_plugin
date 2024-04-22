@@ -12,7 +12,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -54,5 +54,5 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ runner.os }}-executable
-          path: bin/${{ runner.os }}_executable
+          name: flutter_cwa_plugin-${{ runner.os }}-executable
+          path: bin/flutter_cwa_plugin_${{ runner.os }}_executable
