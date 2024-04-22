@@ -23,6 +23,18 @@ jobs:
         with:
           sdk: stable
 
+      - name: Setup custom SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "Host gitlab.com-codewave" >> ~/.ssh/config
+          echo "    HostName gitlab.com" >> ~/.ssh/config
+          echo "    User git" >> ~/.ssh/config
+          echo "    IdentityFile $(pwd)/ssh_key" >> ~/.ssh/config
+          echo "    StrictHostKeyChecking no" >> ~/.ssh/config
+          ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/config
+          chmod 600 $(pwd)/ssh_key
+
       - name: Setup SSH for GitLab Access
         uses: webfactory/ssh-agent@v0.5.3
         with:
