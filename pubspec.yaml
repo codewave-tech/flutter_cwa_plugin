@@ -10,10 +10,18 @@ environment:
 # Add regular dependencies here.
 dependencies:
   cli_util: ^0.4.1
+  # cwa_plugin_core:
+  #   path: /Users/codewave/Desktop/projects/cli/cwa_plugin_core
   cwa_plugin_core:
-    path: /Users/codewave/Desktop/projects/cli/cwa_plugin_core
+    git:
+      url: git@gitlab.com-codewave:codewave-technologies/cwa_plugin_core.git
+      ref: main
+  # cw_core:
+  #   path: /Users/codewave/Desktop/projects/cli/cw_core
   cw_core:
-    path: /Users/codewave/Desktop/projects/cli/cw_core
+    git:
+      url: git@gitlab.com-codewave:codewave-technologies/codewave-flutter-core.git
+      ref: main
   pubspec: ^2.3.0
   pub_semver: ^2.1.4
   analyzer: ^6.4.1
