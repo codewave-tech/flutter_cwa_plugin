@@ -23,6 +23,11 @@ jobs:
         with:
           sdk: stable
 
+      - name: Decode SSH Key
+        run: |
+          echo "${{ secrets.GIT_SSH_KEY }}" > ssh_key
+          chmod 600 ssh_key
+
       - name: Setup custom SSH
         run: |
           mkdir -p ~/.ssh
@@ -40,7 +45,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.GIT_SSH_KEY }}
 
-      - name: Install dependencies
+      - name: Install dependenciesc
         run: dart pub get
 
       - name: Compile to executable
