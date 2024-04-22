@@ -38,7 +38,7 @@ class ArchBuddyInit extends Command {
 
     if (idx == null) {
       CWLogger.i.stdout("Select init type:");
-      Menu<String> menu = Menu<String>([
+      Menu menu = Menu([
         'Use standard predefined architectures',
         'Use custom conifguration file',
       ]);

@@ -31,7 +31,7 @@ class ArchBuddyMLG extends Command {
   @override
   Future<void> run() async {
     CWLogger.namedLog('Codewave Multilingual tool : ');
-    Menu<String> menu1 = Menu([
+    Menu menu1 = Menu([
       'Generate Excel file',
       'Analyze Excel file and enable localization in the project'
     ]);
@@ -59,7 +59,7 @@ class ArchBuddyMLG extends Command {
       exit(0);
     }
 
-    Menu<String> menu2 = Menu([
+    Menu menu2 = Menu([
       'Use Google sheet URL',
       'Access the local excel file (codewave_translation_${RuntimeConfig().dependencyManager.name}.xlsx)'
     ]);

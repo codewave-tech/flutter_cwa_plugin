@@ -47,7 +47,8 @@ class ArchBuddyHarbor extends Command {
 
     CWLogger.namedLog("Select the feature you want to ship");
 
-    Menu featureMenu = Menu(features.map((e) => e.path.split('/').last));
+    Menu featureMenu =
+        Menu(features.map((e) => e.path.split('/').last).toList());
     int idx = featureMenu.choose().index;
     // int idx = 0;
 

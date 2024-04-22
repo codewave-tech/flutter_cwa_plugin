@@ -30,7 +30,7 @@ class ArchBuddyAddFeature extends Command {
     }
 
     CWLogger.i.stdout("Please select the feature you want to use");
-    Menu<String> featureMenu = Menu<String>(dirs);
+    Menu featureMenu = Menu(dirs);
 
     int idx;
     switch (FlutterPluginConfig.i.pluginEnvironment) {

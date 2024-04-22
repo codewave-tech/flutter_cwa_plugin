@@ -30,7 +30,7 @@ class ArchBuddyAddLibrary extends Command {
     }
 
     CWLogger.i.stdout("Please select the library you want to use");
-    Menu<String> featureMenu = Menu<String>(dirs);
+    Menu featureMenu = Menu(dirs);
 
     int idx = featureMenu.choose().index;
 

@@ -32,7 +32,7 @@ class ArchBuddyCreate extends Command {
 
     if (idx == null) {
       CWLogger.i.stdout('Please select :');
-      Menu<String> menu = Menu([
+      Menu menu = Menu([
         'Create Feature',
         'Create Library',
       ]);

@@ -10,13 +10,13 @@ class ArchBuddyAdvanced extends Command {
 
   @override
   Future<void> run() async {
-    Menu<String> menu = Menu(
+    Menu menu = Menu(
       [
         'Dynamic Theme Support',
         'Multilingual Support',
       ],
     );
-    MenuResult<String> result = menu.choose();
+    MenuResult result = menu.choose();
     if (result.index == 0) {
       await ArchBuddyDynamizeTheme(args).run();
     } else if (result.index == 1) {

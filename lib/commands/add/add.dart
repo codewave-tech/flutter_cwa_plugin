@@ -15,7 +15,7 @@ class ArchBuddyAdd extends Command {
   @override
   Future<void> run() async {
     CWLogger.i.stdout('Please select :');
-    Menu<String> menu = Menu([
+    Menu menu = Menu([
       'Add a Feature',
       'Add a library',
       'Add Makefile - for web support',
