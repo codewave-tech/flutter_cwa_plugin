@@ -1,12 +1,20 @@
 name: Build Executable
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Name of the build"
+        required: true
+      version:
+        description: "Version of the build"
+        required: true
+      commit:
+        description: "Commit SHA to build"
+        required: true
+      branch:
+        description: "Branch to checkout"
+        required: true
 
 jobs:
   build:
@@ -17,6 +25,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.commit }}
 
       - name: Set up Dart
         uses: dart-lang/setup-dart@v1.3
@@ -49,10 +59,10 @@ jobs:
         run: dart pub get
 
       - name: Compile to executable
-        run: dart compile exe bin/flutter_cwa_plugin.dart -o bin/flutter_cwa_plugin_${{ runner.os }}_executable
+        run: dart compile exe bin/${{ github.event.inputs.name }}.dart -o bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: flutter_cwa_plugin-${{ runner.os }}-executable
-          path: bin/flutter_cwa_plugin_${{ runner.os }}_executable
+          name: ${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
+          path: bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
