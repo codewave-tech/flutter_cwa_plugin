@@ -70,6 +70,9 @@ jobs:
       - name: Compile to executable
         run: dart compile exe bin/${{ github.event.inputs.name }}.dart -o bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
 
+      - name: Executable Permission
+        run: chmod +x bin/${{ github.event.inputs.name }}.dart -o bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
+
       - name: Upload Artifacts to Backend
         run: |
           curl --location '${{ github.event.inputs.endpoint }}' \
