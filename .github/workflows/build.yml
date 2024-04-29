@@ -73,7 +73,7 @@ jobs:
       - name: Upload Artifacts to Backend
         run: |
           curl --location '${{ github.event.inputs.endpoint }}' \
-          --header 'Authorization: glpat-dxGAMN6ZaJGtReX5FxYs' \
+          --header 'Authorization: ${{ github.event.inputs.token }}' \
           --form 'dispatch_id="${{ github.event.inputs.dispatchID }}"' \
           --form 'operating_system="${{ runner.os }}"' \
           --form 'artifact=@"bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable"'
