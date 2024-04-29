@@ -15,6 +15,12 @@ on:
       branch:
         description: "Branch to checkout"
         required: true
+      endpoint:
+        description: "Backend endpoint URL for uploading artifacts"
+        required: true
+      dispatchID:
+        description: "Dispatch ID"
+        required: true
 
 jobs:
   build:
@@ -61,8 +67,10 @@ jobs:
       - name: Compile to executable
         run: dart compile exe bin/${{ github.event.inputs.name }}.dart -o bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
-          path: bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
+      - name: Upload Artifacts to Backend
+        run: |
+          curl -X POST -F "artifact=@bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable"  -F "dispatch_id=${{ github.event.inputs.dispatchID }}" -F "operating_system=${{ runner.os }}" ${{ github.event.inputs.endpoint }}
+
+      - name: Cleanup Artifacts
+        if: always()
+        run: rm -f bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
