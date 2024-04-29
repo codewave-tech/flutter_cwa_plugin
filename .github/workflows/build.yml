@@ -21,6 +21,9 @@ on:
       dispatchID:
         description: "Dispatch ID"
         required: true
+      token:
+        description: "Auth token"
+        required: true
 
 jobs:
   build:
@@ -69,7 +72,11 @@ jobs:
 
       - name: Upload Artifacts to Backend
         run: |
-          curl -X POST -F "artifact=@bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable"  -F "dispatch_id=${{ github.event.inputs.dispatchID }}" -F "operating_system=${{ runner.os }}" ${{ github.event.inputs.endpoint }}
+          curl --location '${{ github.event.inputs.endpoint }}' \
+          --header 'Authorization: glpat-dxGAMN6ZaJGtReX5FxYs' \
+          --form 'dispatch_id="${{ github.event.inputs.dispatchID }}"' \
+          --form 'operating_system="${{ runner.os }}"' \
+          --form 'artifact=@"bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable"'
 
       - name: Cleanup Artifacts
         if: always()
