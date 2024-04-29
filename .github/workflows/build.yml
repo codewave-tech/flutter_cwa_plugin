@@ -90,7 +90,18 @@ jobs:
         run: chmod +x bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
         if: runner.os != 'Windows' # Skip on Windows
 
-      - name: Upload Artifacts to Backend
+      - name: Upload Artifacts to Backend (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          curl --location "${{ github.event.inputs.endpoint }}" `
+          --header "Authorization: ${{ github.event.inputs.token }}" `
+          --form 'dispatch_id=${{ github.event.inputs.dispatchID }}' `
+          --form 'operating_system=${{ runner.os }}' `
+          --form 'artifact=@bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable'
+        shell: powershell
+
+      - name: Upload Artifacts to Backend (Unix)
+        if: runner.os != 'Windows'
         run: |
           curl --location "${{ github.event.inputs.endpoint }}" \
           --header "Authorization: ${{ github.event.inputs.token }}" \
@@ -98,6 +109,11 @@ jobs:
           --form 'operating_system=${{ runner.os }}' \
           --form 'artifact=@bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable'
 
-      - name: Cleanup Artifacts
-        if: always()
+      - name: Cleanup Artifacts (Windows)
+        if: runner.os == 'Windows'
+        run: Remove-Item -Path "bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable" -Force
+        shell: powershell
+
+      - name: Cleanup Artifacts (Unix)
+        if: runner.os != 'Windows'
         run: rm -f bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
