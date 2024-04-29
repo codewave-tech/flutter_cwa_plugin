@@ -29,7 +29,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -42,13 +42,29 @@ jobs:
         with:
           sdk: stable
 
-      - name: Decode SSH Key
+      # Windows-specific steps for setting up SSH and SSH-Agent
+      - name: Setup custom SSH (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          echo "${{ secrets.GIT_SSH_KEY }}" | Out-File -Encoding ascii -FilePath ssh_key
+          New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.ssh"
+          Set-Content -Path "$env:USERPROFILE\.ssh\config" -Value @"
+          Host gitlab.com-codewave
+              HostName gitlab.com
+              User git
+              IdentityFile ${{ github.workspace }}\ssh_key
+              StrictHostKeyChecking no
+          "@
+          ssh-keyscan -t rsa gitlab.com >> $env:USERPROFILE\.ssh\known_hosts
+          Get-Content $env:USERPROFILE\.ssh\known_hosts
+          chmod 600 ssh_key
+        shell: powershell
+
+      - name: Setup custom SSH (Unix)
+        if: runner.os != 'Windows'
         run: |
           echo "${{ secrets.GIT_SSH_KEY }}" > ssh_key
           chmod 600 ssh_key
-
-      - name: Setup custom SSH
-        run: |
           mkdir -p ~/.ssh
           echo "Host gitlab.com-codewave" >> ~/.ssh/config
           echo "    HostName gitlab.com" >> ~/.ssh/config
@@ -64,22 +80,23 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.GIT_SSH_KEY }}
 
-      - name: Install dependenciesc
+      - name: Install dependencies
         run: dart pub get
 
       - name: Compile to executable
         run: dart compile exe bin/${{ github.event.inputs.name }}.dart -o bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
 
       - name: Executable Permission
-        run: chmod +x bin/${{ github.event.inputs.name }}.dart -o bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
+        run: chmod +x bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable
+        if: runner.os != 'Windows' # Skip on Windows
 
       - name: Upload Artifacts to Backend
         run: |
-          curl --location '${{ github.event.inputs.endpoint }}' \
-          --header 'Authorization: ${{ github.event.inputs.token }}' \
-          --form 'dispatch_id="${{ github.event.inputs.dispatchID }}"' \
-          --form 'operating_system="${{ runner.os }}"' \
-          --form 'artifact=@"bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable"'
+          curl --location "${{ github.event.inputs.endpoint }}" \
+          --header "Authorization: ${{ github.event.inputs.token }}" \
+          --form 'dispatch_id=${{ github.event.inputs.dispatchID }}' \
+          --form 'operating_system=${{ runner.os }}' \
+          --form 'artifact=@bin/${{ github.event.inputs.name }}_${{ github.event.inputs.version }}_${{ runner.os }}_executable'
 
       - name: Cleanup Artifacts
         if: always()
