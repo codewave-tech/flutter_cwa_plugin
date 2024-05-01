@@ -9,16 +9,9 @@ import 'package:flutter_cwa_plugin/commands/init/init.dart';
 import 'package:flutter_cwa_plugin/commands/j2m/j2m.dart';
 import 'package:flutter_cwa_plugin/commands/mlg/mlg.dart';
 import 'package:flutter_cwa_plugin/config/runtime_config.dart';
-import 'package:pub_semver/pub_semver.dart';
 
 class FlutterPlugin extends Plugin {
   FlutterPlugin(super.args);
-
-  @override
-  String get pluginName => 'flutter_cwa_plugin';
-
-  @override
-  Version get version => Version.parse("1.0.0");
 
   @override
   String get alias => 'flt';
