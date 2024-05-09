@@ -132,16 +132,20 @@ packages:
   cw_core:
     dependency: "direct main"
     description:
-      path: "/Users/codewave/Desktop/projects/cli/cw_core"
-      relative: false
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: f9823d09d497d8e8e8a7f280f0c5e4eab743da31
+      url: "git@gitlab.com-codewave:codewave-technologies/codewave-flutter-core.git"
+    source: git
     version: "1.0.0"
   cwa_plugin_core:
     dependency: "direct main"
     description:
-      path: "/Users/codewave/Desktop/projects/cli/cwa_plugin_core"
-      relative: false
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: cd792efb3834d27b080778e7ed36c749a8e9a557
+      url: "git@gitlab.com-codewave:codewave-technologies/cwa_plugin_core.git"
+    source: git
     version: "1.0.0"
   east_asian_width:
     dependency: transitive
