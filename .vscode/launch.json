@@ -9,9 +9,10 @@
             "request": "launch",
             "type": "dart",
             "args": [
-                "init",
-                "standard",
-                "--TOKEN=glpat-dxGAMN6ZaJGtReX5FxYs"
+                "mlg",
+                "--TOKEN=glpat-dxGAMN6ZaJGtReX5FxYs",
+                "--NAME=flutter_cwa_plugin",
+                "--VERSION=1.0.1"
             ]
         }
     ]

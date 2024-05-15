@@ -66,7 +66,7 @@ class ArchBuddyMLG extends Command {
 
     int idx2;
 
-    switch (FlutterPluginConfig().pluginEnvironment) {
+    switch (FlutterPluginConfig.i.pluginEnvironment) {
       case PluginEnvironment.dev:
         idx2 = 2;
       case PluginEnvironment.prod:

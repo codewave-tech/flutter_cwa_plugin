@@ -30,10 +30,10 @@ class FlutterPlugin extends Plugin {
       };
 
   @override
-  void pluginEntry() {
+  void pluginEntry() async {
     super.pluginEntry();
 
-    RuntimeConfig().initialize();
+    await RuntimeConfig().initialize();
 
     if (commands.containsKey(args[0])) {
       commands[args[0]]?.run();
