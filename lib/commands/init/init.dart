@@ -62,15 +62,12 @@ class ArchBuddyInit extends Command {
 
       CWLogger.i.stdout("Select architecture:");
       Menu menu = Menu(branches);
-      int branchIdx =
-          FlutterPluginConfig.i.pluginEnvironment == PluginEnvironment.prod
-              ? menu.choose().index
-              : 0;
+      int branchIdx = menu.choose().index;
 
       String? archSpecsContent = await GitService.getGitLabFileContent(
         projectId: FlutterPluginConfig.i.archManagerProjectID,
         filePath: '__arch_specs.yaml',
-        branch: branches[idx],
+        branch: branches[branchIdx],
         token: TokenService().accessToken!,
       );
 

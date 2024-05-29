@@ -8,8 +8,9 @@
             "name": "flutter_cwa_plugin",
             "request": "launch",
             "type": "dart",
+            "console": "terminal",
             "args": [
-                "mlg",
+                "init",
                 "--TOKEN=glpat-dxGAMN6ZaJGtReX5FxYs",
                 "--NAME=flutter_cwa_plugin",
                 "--VERSION=1.0.1"
