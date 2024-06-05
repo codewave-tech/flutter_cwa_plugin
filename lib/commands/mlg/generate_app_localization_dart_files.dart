@@ -46,6 +46,11 @@ extension AppLocalizationFileGenerator on ArchBuddyMLG {
       stringBuffer.writeln(
           "AppLocalization${value.languageName}([String locale = '${value.languageCode}']) : super(locale);");
       value.varNameToContentMap.forEach((k, v) {
+        if (!appStringContext.nodeHashMap.containsKey(k)) {
+          CodeScout.logError("Didn't found $k in $key");
+          return;
+        }
+
         AppStringNode node = appStringContext.nodeHashMap[k]!;
         if (node is ASNMethodNode) {
           stringBuffer.writeln('\n@override');

@@ -8,6 +8,7 @@ import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:analyzer/source/line_info.dart';
+import 'package:cw_core/cw_core.dart';
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter_cwa_plugin/config/plugin_config.dart';
@@ -36,13 +37,7 @@ class ArchBuddyMLG extends Command {
       'Analyze Excel file and enable localization in the project'
     ]);
 
-    int idx1;
-    switch (FlutterPluginConfig.i.pluginEnvironment) {
-      case PluginEnvironment.dev:
-        idx1 = 1;
-      case PluginEnvironment.prod:
-        idx1 = menu1.choose().index;
-    }
+    int idx1 = menu1.choose().index;
 
     if (idx1 == 0) {
       AppStringContext appStringContext = await analyzeAppStringFile(
@@ -64,14 +59,7 @@ class ArchBuddyMLG extends Command {
       'Access the local excel file (codewave_translation_${RuntimeConfig().dependencyManager.name}.xlsx)'
     ]);
 
-    int idx2;
-
-    switch (FlutterPluginConfig.i.pluginEnvironment) {
-      case PluginEnvironment.dev:
-        idx2 = 2;
-      case PluginEnvironment.prod:
-        idx2 = menu2.choose().index;
-    }
+    int idx2 = menu2.choose().index;
 
     if (idx2 == 0) {
       CWLogger.i.stdout('Please enter the Google sheet URL :');

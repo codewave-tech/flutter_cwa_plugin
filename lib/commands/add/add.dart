@@ -21,16 +21,7 @@ class ArchBuddyAdd extends Command {
       'Add Makefile - for web support',
     ]);
 
-    int idx;
-
-    switch (FlutterPluginConfig.i.pluginEnvironment) {
-      case PluginEnvironment.dev:
-        idx = 0;
-        break;
-      case PluginEnvironment.prod:
-        idx = menu.choose().index;
-        break;
-    }
+    int idx = menu.choose().index;
 
     switch (idx) {
       case 0:
