@@ -11,7 +11,6 @@ import 'package:analyzer/source/line_info.dart';
 import 'package:cw_core/cw_core.dart';
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 import 'package:excel/excel.dart';
-import 'package:flutter_cwa_plugin/config/plugin_config.dart';
 import 'package:flutter_cwa_plugin/config/runtime_config.dart';
 
 part 'generate_translation_xlsx.dart';

@@ -98,7 +98,7 @@ class ArchBuddyHarbor extends Command {
 
     Map<String, DependencyReference>? dependencies = {};
 
-    if (usedPackages != null && usedPackages.isNotEmpty) {
+    if (usedPackages.isNotEmpty) {
       for (int idx = 0; idx < usedPackages.length; idx++) {
         String pkg = usedPackages.elementAt(idx);
         if (RuntimeConfig().dependencyManager.dependencies.containsKey(pkg)) {

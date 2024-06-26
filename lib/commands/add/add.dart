@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 import 'package:flutter_cwa_plugin/commands/add/add_feature.dart';
 import 'package:flutter_cwa_plugin/commands/add/add_library.dart';
-import 'package:flutter_cwa_plugin/config/plugin_config.dart';
 
 class ArchBuddyAdd extends Command {
   ArchBuddyAdd(super.args);
