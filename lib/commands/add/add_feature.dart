@@ -32,13 +32,7 @@ class ArchBuddyAddFeature extends Command {
     CWLogger.i.stdout("Please select the feature you want to use");
     Menu featureMenu = Menu(dirs);
 
-    int idx;
-    switch (FlutterPluginConfig.i.pluginEnvironment) {
-      case PluginEnvironment.dev:
-        idx = 0;
-      case PluginEnvironment.prod:
-        idx = featureMenu.choose().index;
-    }
+    int idx = featureMenu.choose().index;
 
     CWLogger.i.progress('Adding ${dirs[idx]} to the project');
 
