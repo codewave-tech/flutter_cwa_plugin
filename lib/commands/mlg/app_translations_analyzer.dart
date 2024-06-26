@@ -5,7 +5,9 @@ extension AppTranslationAnaluyzer on ArchBuddyMLG {
     Directory generatedFilesDir = Directory(path);
     if (!generatedFilesDir.existsSync()) return null;
 
-    CWLogger.i.progress("Checking for app_translation files in $path");
+    CliSpin loader = CliSpin(
+      text: "Checking for app_translation files in $path",
+    ).start();
 
     List<File> appTranslationFiles =
         generatedFilesDir.listSync().map((e) => File(e.path)).toList();
@@ -16,7 +18,7 @@ extension AppTranslationAnaluyzer on ArchBuddyMLG {
       String fileName = appTranslationFiles[idx].path.split('/').last;
       RegExpMatch? match = pattern.firstMatch(fileName);
       if (match != null) {
-        CWLogger.namedLog('Found $fileName', loggerColor: CWLoggerColor.green);
+        // CWLogger.namedLog('Found $fileName', loggerColor: CWLoggerColor.green);
         String fileContent = appTranslationFiles[idx].readAsStringSync();
 
         var result = parseString(
@@ -40,6 +42,13 @@ extension AppTranslationAnaluyzer on ArchBuddyMLG {
           ),
         );
       }
+    }
+
+    if (languagesContext.isEmpty) {
+      loader.info("No Translations found in the project");
+    } else {
+      loader.success(
+          "Found : ${languagesContext.map((e) => e.defaultLanguageName)} ");
     }
 
     return languagesContext;

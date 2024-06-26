@@ -1,7 +1,10 @@
 import 'dart:io' show File;
 
+import 'package:cli_spin/cli_spin.dart';
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
+import 'package:flutter_cwa_plugin/commands/add/add_library.dart';
 import 'package:flutter_cwa_plugin/commands/mlg/mlg.dart';
+import 'package:flutter_cwa_plugin/config/plugin_config.dart';
 import 'package:flutter_cwa_plugin/config/runtime_config.dart';
 import 'package:flutter_cwa_plugin/utils/framework_utils.dart';
 import 'package:pubspec/pubspec.dart';
@@ -16,6 +19,8 @@ class FeatureSpecificationYaml extends SpecificationYamlImpl {
     super.appStringContext,
     super.appTranslationContexts,
     super.usedNodes,
+    super.assetPaths,
+    super.libraries,
   });
 
   @override
@@ -28,6 +33,8 @@ class FeatureSpecificationYaml extends SpecificationYamlImpl {
     AppStringContext? appStringContext,
     List<AppStringContext>? appTranslationContexts,
     List<String>? usedNodes,
+    List<String>? assetPaths,
+    List<String>? libraries,
   }) {
     return FeatureSpecificationYaml(
       name: name ?? this.name,
@@ -39,6 +46,8 @@ class FeatureSpecificationYaml extends SpecificationYamlImpl {
       appTranslationContexts:
           appTranslationContexts ?? this.appTranslationContexts,
       usedNodes: usedNodes ?? this.usedNodes,
+      assetPaths: assetPaths ?? this.assetPaths,
+      libraries: libraries ?? this.libraries,
     );
   }
 
@@ -53,6 +62,8 @@ class FeatureSpecificationYaml extends SpecificationYamlImpl {
       appStringContext: speficificationDelegate.appStringContext,
       appTranslationContexts: speficificationDelegate.appTranslationContexts,
       usedNodes: speficificationDelegate.usedNodes,
+      assetPaths: speficificationDelegate.assetPaths,
+      libraries: speficificationDelegate.libraries,
     );
   }
 
@@ -61,8 +72,6 @@ class FeatureSpecificationYaml extends SpecificationYamlImpl {
     required List<String> args,
   }) async {
     if (File(specsfile).existsSync()) {
-      CWLogger.i.stdout("Adapting to specifications");
-
       SpeficificationDelegate speficificationDelegate =
           SpecificationYamlImpl.parse(specsfile);
 
@@ -71,6 +80,8 @@ class FeatureSpecificationYaml extends SpecificationYamlImpl {
       FeatureSpecificationYaml featureSpecificationYaml =
           FeatureSpecificationYaml.fromSepcificationDelegate(
               speficificationDelegate);
+
+      print(featureSpecificationYaml.libraries);
 
       featureSpecificationYaml.dependencies?.forEach((key, value) {
         requirements[key] = value;
@@ -93,7 +104,49 @@ class FeatureSpecificationYaml extends SpecificationYamlImpl {
         featureSpecificationYaml: featureSpecificationYaml,
       );
 
-      await FrameworkUtils.addPubspecDependencies(dependencies: requirements);
+      await addAssets(featureSpecificationYaml.assetPaths);
+
+      for (int idx = 0;
+          idx < (featureSpecificationYaml.libraries?.length ?? 0);
+          idx++) {
+        await ArchBuddyAddLibrary.addLibrary(
+          featureSpecificationYaml.libraries![idx],
+        );
+      }
+
+      CliSpin loader = CliSpin(text: "Adding dependencies").start();
+      try {
+        await FrameworkUtils.addPubspecDependencies(dependencies: requirements);
+
+        await FrameworkUtils.saveAndPubGet();
+
+        loader.success("Dependencies added successfully");
+      } catch (e) {
+        loader.fail(e.toString());
+      }
+    }
+  }
+
+  static Future<void> addAssets(List<String>? assetPaths) async {
+    if (assetPaths == null || assetPaths.isEmpty) return;
+
+    CliSpin loader = CliSpin(text: "Downloading assets").start();
+    try {
+      for (int idx = 0; idx < assetPaths.length; idx++) {
+        await GitService.downloadDirectoryContents(
+          projectId: FlutterPluginConfig.i.pilotRepoProjectID,
+          branch: FlutterPluginConfig.i.pilotRepoReferredBranch,
+          directoryPath: assetPaths[idx],
+          downloadPathBase: RuntimeConfig().commandExecutionPath,
+          accessToken: TokenService().accessToken!,
+        );
+      }
+
+      FrameworkUtils.addPubSpecAssets(assetPaths: assetPaths);
+
+      loader.success('Assets added successfully');
+    } catch (e) {
+      loader.fail(e.toString());
     }
   }
 
@@ -103,43 +156,49 @@ class FeatureSpecificationYaml extends SpecificationYamlImpl {
     required FeatureSpecificationYaml featureSpecificationYaml,
   }) async {
     if (featureSpecificationYaml.appStringContext == null) return;
+    CliSpin loader = CliSpin(text: "Injecting strings").start();
+    try {
+      // app string context injection
+      String? featureDefaultLang =
+          featureSpecificationYaml.appStringContext!.defaultLanguageCode;
+      String? defaultLang = appStringContext.defaultLanguageCode;
 
-    // app string context injection
-    String? featureDefaultLang =
-        featureSpecificationYaml.appStringContext!.defaultLanguageCode;
-    String? defaultLang = appStringContext.defaultLanguageCode;
+      int? idx;
 
-    int? idx;
+      bool hasMismatch = featureDefaultLang != defaultLang;
 
-    bool hasMismatch = featureDefaultLang != defaultLang;
+      // has default language mismatch
+      if (hasMismatch) {
+        // get the index of app string context with where the default language matches
+        idx = _hasALangMatch(featureSpecificationYaml, defaultLang);
+      }
 
-    // has default language mismatch
-    if (hasMismatch) {
-      // get the index of app string context with where the default language matches
-      idx = _hasALangMatch(featureSpecificationYaml, defaultLang);
-    }
+      if (hasMismatch && idx != null) {
+        _fillAppStringFile(
+          featureSpecificationYaml.appTranslationContexts![idx],
+          featureSpecificationYaml,
+        );
+      } else {
+        _fillAppStringFile(
+          featureSpecificationYaml.appStringContext!,
+          featureSpecificationYaml,
+          fillContent: !hasMismatch,
+        );
+      }
 
-    if (hasMismatch && idx != null) {
-      _fillAppStringFile(
-        featureSpecificationYaml.appTranslationContexts![idx],
-        featureSpecificationYaml,
+      appStringContext.nodeHashMap.addAll(
+        featureSpecificationYaml.appStringContext?.nodeHashMap ?? {},
       );
-    } else {
-      _fillAppStringFile(
-        featureSpecificationYaml.appStringContext!,
-        featureSpecificationYaml,
-        fillContent: !hasMismatch,
+
+      await _fillAppTranslationFiles(
+        appStringContext: appStringContext,
+        featureSpecificationYaml: featureSpecificationYaml,
       );
+
+      loader.success('Strings injected successfully');
+    } catch (e) {
+      loader.fail(e.toString());
     }
-
-    appStringContext.nodeHashMap.addAll(
-      featureSpecificationYaml.appStringContext?.nodeHashMap ?? {},
-    );
-
-    await _fillAppTranslationFiles(
-      appStringContext: appStringContext,
-      featureSpecificationYaml: featureSpecificationYaml,
-    );
   }
 
   static int? _hasALangMatch(

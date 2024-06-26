@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cli_spin/cli_spin.dart';
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 import 'package:flutter_cwa_plugin/config/plugin_config.dart';
 import 'package:flutter_cwa_plugin/config/runtime_config.dart';
@@ -34,20 +35,32 @@ class ArchBuddyAddLibrary extends Command {
 
     int idx = featureMenu.choose().index;
 
-    CWLogger.i.progress('Adding ${dirs[idx]} to the project');
-    await GitService.downloadDirectoryContents(
-      projectId: FlutterPluginConfig.i.pilotRepoProjectID,
-      branch: FlutterPluginConfig.i.pilotRepoReferredBranch,
-      directoryPath: '${RuntimeConfig.libraryPath}/${dirs[idx]}',
-      downloadPathBase: RuntimeConfig().commandExecutionPath,
-      accessToken: TokenService().accessToken!,
-      isProd: FlutterPluginConfig.i.pluginEnvironment == PluginEnvironment.prod,
-    );
+    await addLibrary(dirs[idx]);
 
     await FeatureSpecificationYaml.adaptSpecifications(
       specsfile:
           '${RuntimeConfig.libraryPath}/${dirs[idx]}/${SpecificationYamlImpl.fileName}',
       args: args,
     );
+  }
+
+  static Future<void> addLibrary(String libraryName) async {
+    CliSpin cliSpin =
+        CliSpin(text: "Adding $libraryName to the project").start();
+
+    try {
+      await GitService.downloadDirectoryContents(
+        projectId: FlutterPluginConfig.i.pilotRepoProjectID,
+        branch: FlutterPluginConfig.i.pilotRepoReferredBranch,
+        directoryPath: '${RuntimeConfig.libraryPath}/$libraryName',
+        downloadPathBase: RuntimeConfig().commandExecutionPath,
+        accessToken: TokenService().accessToken!,
+        isProd:
+            FlutterPluginConfig.i.pluginEnvironment == PluginEnvironment.prod,
+      );
+      cliSpin.success("$libraryName added successfully");
+    } catch (e) {
+      cliSpin.fail(e.toString());
+    }
   }
 }

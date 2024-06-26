@@ -19,9 +19,11 @@ class ArchBuddyHarbor extends Command {
 
   @override
   Future<void> run() async {
+    int idx = Menu(['feature', 'library']).choose().index;
     // The path to your feature folder
-    String featureFolderPath = "lib/features".normalizedPath;
-    // '/Users/codewave/Desktop/projects/cli/cwa_pilot/lib/features';
+    String featureFolderPath = idx == 0
+        ? "lib/features".normalizedPath
+        : "lib/libraries".normalizedPath;
 
     Directory featureFolder = Directory(featureFolderPath);
 
@@ -49,7 +51,7 @@ class ArchBuddyHarbor extends Command {
 
     Menu featureMenu =
         Menu(features.map((e) => e.path.split('/').last).toList());
-    int idx = featureMenu.choose().index;
+    idx = featureMenu.choose().index;
     // int idx = 0;
 
     featureFolderPath = features[idx].path;

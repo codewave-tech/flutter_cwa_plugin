@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 import 'package:flutter_cwa_plugin/config/plugin_config.dart';
+import 'package:flutter_cwa_plugin/utils/framework_utils.dart';
 import 'package:pubspec/pubspec.dart';
 
 class RuntimeConfig extends RTC<PubSpec> {
@@ -21,7 +22,8 @@ class RuntimeConfig extends RTC<PubSpec> {
   Future<void> initialize() async {
     switch (FlutterPluginConfig.i.pluginEnvironment) {
       case PluginEnvironment.dev:
-        commandExecutionPath = '/Users/codewave/Desktop/projects/simcorner';
+        commandExecutionPath =
+            '/Users/codewave/Desktop/projects/cli/auth_check';
         break;
       case PluginEnvironment.prod:
         commandExecutionPath = Directory.current.path;

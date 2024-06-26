@@ -8,6 +8,7 @@ import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:analyzer/source/line_info.dart';
+import 'package:cli_spin/cli_spin.dart';
 import 'package:cw_core/cw_core.dart';
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 import 'package:excel/excel.dart';

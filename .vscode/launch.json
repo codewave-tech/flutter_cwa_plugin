@@ -10,7 +10,8 @@
             "type": "dart",
             "console": "terminal",
             "args": [
-                "mlg",
+                "add",
+                "feature",
                 "--TOKEN=glpat-dxGAMN6ZaJGtReX5FxYs",
                 "--NAME=flutter_cwa_plugin",
                 "--VERSION=1.0.1"

@@ -3,13 +3,14 @@ part of mlg_command;
 
 extension AppStringAnalyzer on ArchBuddyMLG {
   Future<AppStringContext> analyzeAppStringFile(String path) async {
+    CliSpin loader = CliSpin(text: "Analyzing strings").start();
+
     File appStringFile = File(path);
     if (!appStringFile.existsSync()) {
-      CWLogger.namedLog("app_strings.dart file missing");
+      loader.fail("app_strings.dart file missing");
       exit(2);
     }
 
-    CWLogger.i.progress("Analyzing app_strings.dart");
     String fileContent = await appStringFile.readAsString();
     var result = parseString(
       content: fileContent,
@@ -23,6 +24,8 @@ extension AppStringAnalyzer on ArchBuddyMLG {
       nodeHashMp: nodeHashMp,
       lineInfo: lineInfo,
     ));
+
+    loader.success("Strings Analyzed, found ${nodeHashMp.length} strings");
 
     return AppStringContext.fromNodeHashMap(
       nodeHashMap: nodeHashMp,

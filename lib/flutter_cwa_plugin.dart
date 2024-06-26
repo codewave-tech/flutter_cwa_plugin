@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 import 'package:flutter_cwa_plugin/commands/add/add.dart';
 import 'package:flutter_cwa_plugin/commands/advanced/advanced.dart';
@@ -36,7 +38,9 @@ class FlutterPlugin extends Plugin {
     await RuntimeConfig().initialize();
 
     if (commands.containsKey(args[0])) {
-      commands[args[0]]?.run();
+      await commands[args[0]]?.run();
     }
+
+    exit(0);
   }
 }
