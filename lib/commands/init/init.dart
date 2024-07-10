@@ -47,7 +47,6 @@ class ArchBuddyInit extends Command {
     }
 
     if (idx == 0) {
-      CWLogger.i.progress('Looking for available architectures');
       List<String>? branches = await GitService.getGitLabBranches(
         FlutterPluginConfig.i.archManagerProjectID,
         TokenService().accessToken!,
