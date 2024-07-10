@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cli_spin/cli_spin.dart';
 import 'package:cwa_plugin_core/cwa_plugin_core.dart';
 import 'package:flutter_cwa_plugin/config/plugin_config.dart';
 import 'package:flutter_cwa_plugin/config/runtime_config.dart';
@@ -64,6 +65,11 @@ class ArchBuddyInit extends Command {
       Menu menu = Menu(branches);
       int branchIdx = menu.choose().index;
 
+      CliSpin loader = CliSpin(
+              text:
+                  "Adapting architecture ${branches[branchIdx]} in the project")
+          .start();
+
       String? archSpecsContent = await GitService.getGitLabFileContent(
         projectId: FlutterPluginConfig.i.archManagerProjectID,
         filePath: '__arch_specs.yaml',
@@ -72,9 +78,8 @@ class ArchBuddyInit extends Command {
       );
 
       if (archSpecsContent == null) {
-        CWLogger.namedLog(
-          "Unable to analyze the specification of the selected architecture",
-        );
+        loader.fail(
+            "Unable to analyze the specification of the selected architecture");
         exit(1);
       }
 
@@ -105,10 +110,7 @@ class ArchBuddyInit extends Command {
       );
 
       if (archPubspecContent == null) {
-        CWLogger.namedLog(
-          "Failed to add required dependencies",
-          loggerColor: CWLoggerColor.red,
-        );
+        loader.fail("Failed to add required dependencies");
         exit(1);
       }
 
@@ -118,6 +120,10 @@ class ArchBuddyInit extends Command {
       await FrameworkUtils.addPubspecDependencies(
         dependencies: pubSpec.dependencies,
       );
+
+      await FrameworkUtils.saveAndPubGet();
+
+      loader.success("Project now follows the selected architecture");
 
       return;
     }

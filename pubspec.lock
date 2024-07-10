@@ -135,7 +135,7 @@ packages:
       path: "/Users/codewave/Desktop/projects/cli/cw_core"
       relative: false
     source: path
-    version: "1.1.0"
+    version: "1.1.1"
   cwa_plugin_core:
     dependency: "direct main"
     description:

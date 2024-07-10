@@ -22,8 +22,7 @@ class RuntimeConfig extends RTC<PubSpec> {
   Future<void> initialize() async {
     switch (FlutterPluginConfig.i.pluginEnvironment) {
       case PluginEnvironment.dev:
-        commandExecutionPath =
-            '/Users/codewave/Desktop/projects/cli/auth_check';
+        commandExecutionPath = '/Users/codewave/Desktop/projects/cli/tmp';
         break;
       case PluginEnvironment.prod:
         commandExecutionPath = Directory.current.path;
