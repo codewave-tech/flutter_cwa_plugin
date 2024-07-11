@@ -18,7 +18,7 @@ class FlutterPluginConfig extends PluginConfig {
   String get pilotRepoReferredBranch => 'main';
 
   @override
-  PluginEnvironment get pluginEnvironment => PluginEnvironment.dev;
+  PluginEnvironment get pluginEnvironment => PluginEnvironment.prod;
 
   @override
   Version get version => Version.parse("1.0.0");

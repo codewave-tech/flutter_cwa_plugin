@@ -9,7 +9,6 @@ class FrameworkUtils {
     required Map<String, DependencyReference> dependencies,
   }) async {
     RuntimeConfig().dependencyManager.dependencies.addAll(dependencies);
-    print(RuntimeConfig().dependencyManager.dependencies);
 
     CWLogger.i.trace(RuntimeConfig().dependencyManager.toJson().toString());
   }
