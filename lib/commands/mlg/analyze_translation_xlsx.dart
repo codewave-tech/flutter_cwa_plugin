@@ -58,8 +58,15 @@ extension TranslationFileAnalyzer on ArchBuddyMLG {
         int colIdx = key.columnIndex;
         Map<String, String> varNameToContentMap = {};
         for (int idx = rowIndex; idx < maxRow; idx++) {
-          String varName = sheet.rows[idx][0]!.value.toString();
-          String content = sheet.rows[idx][colIdx]!.value.toString();
+          String? varName = sheet.rows[idx][0]?.value.toString();
+          String? content = sheet.rows[idx][colIdx]?.value.toString();
+          if (varName == null || content == null) {
+            CWLogger.namedLog(
+              "Invalid content found at row : $idx, column : $colIdx",
+              loggerColor: CWLoggerColor.red,
+            );
+            continue;
+          }
           varNameToContentMap[varName] = content;
         }
         String code = value['code']!;

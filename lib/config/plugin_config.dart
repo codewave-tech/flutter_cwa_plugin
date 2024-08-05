@@ -21,5 +21,5 @@ class FlutterPluginConfig extends PluginConfig {
   PluginEnvironment get pluginEnvironment => PluginEnvironment.prod;
 
   @override
-  Version get version => Version.parse("1.0.0");
+  Version get version => Version.parse("1.6.0");
 }
