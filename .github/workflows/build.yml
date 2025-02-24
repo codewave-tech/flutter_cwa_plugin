@@ -4,32 +4,32 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: "Name of the build"
+        description: 'Name of the build'
         required: true
       version:
-        description: "Version of the build"
+        description: 'Version of the build'
         required: true
       commit:
-        description: "Commit SHA to build"
+        description: 'Commit SHA to build'
         required: true
       branch:
-        description: "Branch to checkout"
+        description: 'Branch to checkout'
         required: true
       endpoint:
-        description: "Backend endpoint URL for uploading artifacts"
+        description: 'Backend endpoint URL for uploading artifacts'
         required: true
       dispatchID:
-        description: "Dispatch ID"
+        description: 'Dispatch ID'
         required: true
       token:
-        description: "Auth token"
+        description: 'Auth token'
         required: true
 
 jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-15, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
