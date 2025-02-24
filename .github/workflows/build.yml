@@ -29,7 +29,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-15]
+        os: [macos-15-large]
     runs-on: ${{ matrix.os }}
 
     steps:
