@@ -4,3 +4,4 @@
 .vscode
 bin/
 .*
+bin/flutter_cwa_plugin
