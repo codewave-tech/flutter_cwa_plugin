@@ -58,10 +58,10 @@ packages:
     dependency: transitive
     description:
       name: args
-      sha256: bf9f5caeea8d8fe6721a9c358dd8a5c1947b27f1cfaa18b39c301273594919e6
+      sha256: d0481093c50b1da8910eb0bb301626d4d8eb7284aa739614d2b394ee09e3ea04
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.0"
+    version: "2.7.0"
   async:
     dependency: transitive
     description:
@@ -139,8 +139,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: main
-      resolved-ref: f4863cf10f77e43185a97b42464268e0c0b4fd62
+      ref: "feature/update-api-and-model"
+      resolved-ref: "432048454fb4a6d01413c64640d0420c6d82f330"
       url: "git@gitlab.com-codewave:codewave-technologies/cwa_plugin_core.git"
     source: git
     version: "1.1.0"

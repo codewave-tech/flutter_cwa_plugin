@@ -15,7 +15,7 @@ dependencies:
   cwa_plugin_core:
     git:
       url: git@gitlab.com-codewave:codewave-technologies/cwa_plugin_core.git
-      ref: main
+      ref: feature/update-api-and-model
   # cw_core:
   #   path: /Users/codewave/Desktop/projects/cli/cw_core
   cw_core:
