@@ -1,0 +1,66 @@
+[
+  {
+    "arch_name": "Flutter Standard Architecture",
+    "arch_description": "A standard architecture for Flutter applications, focusing on separation of concerns and reusability.",
+    "master_repo_details": {
+      "url": "https://gitlab.com/codewave-technologies/cwa-pilot-app",
+      "project_id": 55596387,
+      "branch": "main"
+    },
+    "arch_manager_details": {
+      "url": "https://gitlab.com/codewave-technologies/flutter_arch_manager",
+      "project_id": 55849600,
+      "branch": "main"
+    },
+    "reusability": [
+      {
+        "name": "Library",
+        "description": "Libraries are the smallest reusable components in the architecture. They are designed to be used across multiple projects and should be generic enough to be reused in different contexts.",
+        "master_repo_details": {
+          "url": "https://gitlab.com/codewave-technologies/cwa-pilot-app",
+          "project_id": 55596387,
+          "branch": "main",
+          "path": "lib/libraries"
+        }
+      },
+      {
+        "name": "Feature",
+        "description": "Features are larger components that encapsulate a specific functionality or set of functionalities. They can be reused across different parts of the application or even in different applications.",
+        "master_repo_details": {
+          "url": "https://gitlab.com/codewave-technologies/cwa-pilot-app",
+          "project_id": 55596387,
+          "branch": "main",
+          "path": "lib/features"
+        }
+      },
+      {
+        "name": "Core",
+        "description": "Core contains configuration files for themes, multilingual support, and CodeScout initialization. It handles the setup and management of various system-wide settings and preferences, enabling flexibility and customization across the application.",
+        "master_repo_details": {
+          "url": "https://gitlab.com/codewave-technologies/cwa-pilot-app",
+          "project_id": 55596387,
+          "branch": "main",
+          "path": "lib/core"
+        }
+      },{
+        "name": "Router",
+        "description": "Routers are used to centralize the navigation part of the Flutter application. They allow the management of routes and deep linking, providing a structured way to handle app navigation, including internal and external link handling, ensuring a smooth user experience across different sections of the app.",
+        "master_repo_details": {
+          "url": "https://gitlab.com/codewave-technologies/cwa-pilot-app",
+          "project_id": 55596387,
+          "branch": "main",
+          "path": "lib/router"
+        }
+      },{
+        "name": "Services",
+        "description": "Services are used to manage analytics, crashlytics, and the response status of APIs. They provide centralized functionality for tracking application performance, handling error reports, and managing API interactions, ensuring reliable and efficient communication between the app and backend services.",
+        "master_repo_details": {
+          "url": "https://gitlab.com/codewave-technologies/cwa-pilot-app",
+          "project_id": 55596387,
+          "branch": "main",
+          "path": "lib/services"
+        }
+      }
+    ]
+  }
+]

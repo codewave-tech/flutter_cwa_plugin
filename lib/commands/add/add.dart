@@ -9,7 +9,7 @@ class ArchBuddyAdd extends Command {
 
   @override
   String get description =>
-      "Add features, libraries, or utilities from our pilot repo.";
+      "Add features, libraries, or utilities from our main repo.";
 
   @override
   Future<void> run() async {
